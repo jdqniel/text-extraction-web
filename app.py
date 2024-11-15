@@ -1,3 +1,4 @@
+import numpy as np
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 from PIL import Image
@@ -32,7 +33,7 @@ def extract_page_image(pdf, page_number, max_width=800, max_height=1000):
         scale_factor = min(max_width / img_pil.width, max_height / img_pil.height)
         new_width = int(img_pil.width * scale_factor)
         new_height = int(img_pil.height * scale_factor)
-        img_resized = img_pil.resize((new_width, new_height), Image.LANCZOS)
+        img_resized = img_pil.resize((new_width, new_height), Image.Resampling.LANCZOS)
         return img_resized, (new_width, new_height), (page.width, page.height)
     except Exception as e:
         st.error(f"Error processing page image: {e}")
@@ -82,13 +83,13 @@ def main():
             if img_pil:
                 st.write(f"Page {page_number + 1}: Draw a bounding box to select text")
                 canvas_result = st_canvas(
-                    fill_color=None,  # Transparent fill
+                    fill_color=None,  # Transparent fill # type: ignore
                     stroke_width=2,
                     stroke_color="#FF0000",  # Red outline for bounding box
-                    background_image=img_pil,
+                    background_image=img_pil, # type: ignore
                     update_streamlit=True,
-                    width=canvas_dims[0],
-                    height=canvas_dims[1],
+                    width=canvas_dims[0], # type: ignore
+                    height=canvas_dims[1], # type: ignore
                     drawing_mode="rect",
                     key="canvas",
                 )
